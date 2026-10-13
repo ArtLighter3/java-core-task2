@@ -8,7 +8,11 @@ public class TestPlanScanner {
     record TestStep(String id, String methodName, int order) {}
 
     public static void buildPlan(Class<?> cl) {
-        Set<TestStep> testSteps = new TreeSet<>(Comparator.comparingInt(TestStep::order));
+        Set<TestStep> testSteps = new TreeSet<>(Comparator
+                .comparingInt(TestStep::order)
+                .thenComparing(TestStep::id)
+                .thenComparing(TestStep::methodName)
+        );
 
         for (Method method : cl.getDeclaredMethods()) {
             if (method.isAnnotationPresent(TestId.class)) {
